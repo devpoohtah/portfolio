@@ -10,13 +10,13 @@ app = Flask(__name__)
 SITE = {
     "name": "Justin Brian Solamillo",
     "role": "Full Stack Developer",
-    "tagline": "BSIT Graduate | Web Developer",
+    "tagline": "BSIT Student | Web Developer",
     "intro": (
         "I build clean, scalable, and user-friendly web applications "
         "using Python, Flask, JavaScript, and modern web technologies."
     ),
     "email": "jbs.soll29@gmail.com.com",
-    "phone": "+63 912 345 6789",
+    "phone": "+63 951 597 0363",
     "location": "Philippines",
     "socials": {
         "github": "https://github.com/",
