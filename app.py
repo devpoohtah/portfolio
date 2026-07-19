@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from datetime import datetime
 import os
-
+import smtplib
+from email.mime.text import MIMEText
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from dotenv import load_dotenv
+load_dotenv()
+SMTP_HOST = "smtp.gmail.com"
+SMTP_PORT = 587
+SMTP_USER = os.environ.get("SMTP_USER")       # your Gmail address
+SMTP_PASS = os.environ.get("SMTP_PASS")       # the app password from step 1
 app = Flask(__name__)
 
+limiter = Limiter(get_remote_address, app=app, default_limits=[])
 # ---------------------------------------------------------------------------
 # Site content lives here so you can edit your info without touching HTML.
 # ---------------------------------------------------------------------------
@@ -42,7 +52,7 @@ SITE = {
         {
             "title": "Mrs. Brave Cake Shop",
             "desc": "A full-stack cake shop platform where customers order premade cakes or fully customize their own, book pickup/delivery slots, and track orders in real time. Includes live in-app chat between customer and shop (Firebase onSnapshot) and real-time delivery tracking, plus an admin dashboard for sales, bookings, and inventory analytics. Built as lead developer for our capstone project.",
-            "tags": ["Flask", "JavaScript","Firebase", "Firestore","Firebase Authentication", ],
+            "tags": ["Flask", "JavaScript","Firebase", "Firestore","Firebase Authentication", "PWA"],
             "category": "Web App",
             "featured": True,
             "color": "from-amber-500/30 to-rose-500/20",
@@ -116,12 +126,45 @@ SITE = {
         {
             "title": "Expenses Logger",
             "desc": "A simple offline expense tracker (PWA) for daily budgeting — set a budget for an event or outing, log expenses by category and item, and watch total spent and remaining balance update in real time. Includes expense history with PDF export and a clear-all option.",
-            "tags": ["JavaScript", "HTML", "CSS"],
+            "tags": ["JavaScript", "HTML", "CSS", "PWA"],
             "category": "Web App",
             "featured": False,
             "color": "from-lime-500/30 to-green-400/20",
             "repo_url": "https://github.com/devpoohtah/expenses-tracker",
             "live_url": "https://devpoohtah.github.io/expenses-tracker/",
+            "image": "",
+        },
+        {
+            "title": "BMI Calculator",
+            "desc": "Built the same BMI calculator to explore different platforms — a Python console program, a Java desktop app with a GUI, and a native Kotlin Android app in Android Studio. Each version takes height and weight and returns the calculated BMI with its health category.",
+            "tags": ["Python", "Java", "Kotlin"],
+            "category": "Mobile App",
+            "featured": False,
+            "color": "from-purple-500/30 to-pink-400/20",
+            "repo_url": "",
+            "live_url": "",
+            "image": "",
+        },
+        {
+            "title": "E-Commerce Website",
+            "desc": "A basic e-commerce website built with HTML and CSS — product listings and a storefront layout. A 1st-year project focused on frontend fundamentals.",
+            "tags": ["HTML", "CSS"],
+            "category": "Web App",
+            "featured": False,
+            "color": "from-yellow-500/30 to-amber-400/20",
+            "repo_url": "",
+            "live_url": "",
+            "image": "",
+        },
+        {
+            "title": "E-Commerce Website (Grandeur)",
+            "desc": "A full e-commerce platform built with PHP, MySQL, and Bootstrap — product catalog, styled storefront, and a database-backed backend. A 2nd-year project focused on full-stack web development.",
+            "tags": ["PHP", "MySQL", "Bootstrap"],
+            "category": "Web App",
+            "featured": False,
+            "color": "from-rose-500/30 to-red-400/20",
+            "repo_url": "",
+            "live_url": "",
             "image": "",
         },
     ],
@@ -153,13 +196,8 @@ def home():
 
 
 @app.route("/api/contact", methods=["POST"])
+@limiter.limit("3 per day", error_message="You've reached the daily message limit. Please try again tomorrow, or email me directly.")
 def contact():
-    """Handle contact form submissions.
-
-    Right now this just validates the payload and logs it. Swap the
-    `# TODO` block below for an email send (e.g. Flask-Mail, SendGrid,
-    or a simple SMTP call) or a database insert when you're ready.
-    """
     data = request.get_json(silent=True) or request.form
 
     name = (data.get("name") or "").strip()
@@ -178,8 +216,22 @@ def contact():
     if errors:
         return jsonify({"ok": False, "errors": errors}), 400
 
-    # TODO: send an email / save to a database here.
-    print(f"[contact] {datetime.now().isoformat()} — {name} <{email}> — {subject}\n{message}\n")
+    if SMTP_USER and SMTP_PASS:
+        try:
+            msg = MIMEText(f"From: {name} <{email}>\n\n{message}")
+            msg["Subject"] = f"[Portfolio] {subject or 'New message from ' + name}"
+            msg["From"] = SMTP_USER
+            msg["To"] = SITE["email"]
+            msg["Reply-To"] = email
+
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+                server.starttls()
+                server.login(SMTP_USER, SMTP_PASS)
+                server.send_message(msg)
+        except Exception as e:
+            print(f"[contact] SMTP send failed: {e}")
+    else:
+        print(f"[contact] {datetime.now().isoformat()} — {name} <{email}> — {subject}\n{message}\n")
 
     return jsonify({"ok": True, "message": "Thanks! Your message has been sent."})
 
