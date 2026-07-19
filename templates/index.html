@@ -116,18 +116,15 @@
 
       <p class="text-white/40 text-xs mb-3">Follow me</p>
       <div class="flex gap-3">
-        <a href="{{ site.socials.github }}" target="_blank" rel="noopener" class="social-btn"><i data-lucide="github" class="w-4 h-4"></i></a>
-        <a href="{{ site.socials.linkedin }}" target="_blank" rel="noopener" class="social-btn"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+<a href="{{ site.socials.github }}" target="_blank" rel="noopener" class="social-btn"><img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub" class="w-4 h-4"></a>
+<a href="{{ site.socials.linkedin }}" target="_blank" rel="noopener" class="social-btn"><img src="https://cdn.simpleicons.org/linkedin/ffffff" alt="LinkedIn" class="w-4 h-4"></a>
         <a href="{{ site.socials.email }}" class="social-btn"><i data-lucide="mail" class="w-4 h-4"></i></a>
       </div>
     </div>
 
     <div class="relative flex justify-center md:justify-end" data-aos="fade-left" data-aos-duration="700" data-aos-delay="150">
-      <div class="relative w-72 h-80 sm:w-80 sm:h-96 rounded-3xl bg-gradient-to-b from-accent/20 to-transparent border border-white/10 flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 flex items-center justify-center">
-          <i data-lucide="code-2" class="w-24 h-24 text-white/10"></i>
-        </div>
-        <span class="font-display text-7xl font-extrabold text-white/10">{{ site.name[:1] }}</span>
+<div class="relative w-72 h-80 sm:w-80 sm:h-96 rounded-3xl border border-white/10 overflow-hidden">
+        <img src="{{ url_for('static', filename='images/a.jpg') }}" alt="{{ site.name }}" class="w-full h-full object-cover">
       </div>
 
       <div class="absolute -bottom-6 -left-4 sm:left-8 w-64 rounded-xl bg-panel/90 border border-white/10 backdrop-blur-xl p-4 shadow-2xl font-mono text-[11px] leading-relaxed text-white/70">
@@ -293,8 +290,8 @@
 
         <p class="text-white/40 text-xs mb-3">Let's connect!</p>
         <div class="flex gap-3">
-          <a href="{{ site.socials.github }}" target="_blank" rel="noopener" class="social-btn"><i data-lucide="github" class="w-4 h-4"></i></a>
-          <a href="{{ site.socials.linkedin }}" target="_blank" rel="noopener" class="social-btn"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+<a href="{{ site.socials.github }}" target="_blank" rel="noopener" class="social-btn"><img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub" class="w-4 h-4"></a>
+<a href="{{ site.socials.linkedin }}" target="_blank" rel="noopener" class="social-btn"><img src="https://cdn.simpleicons.org/linkedin/ffffff" alt="LinkedIn" class="w-4 h-4"></a>
           <a href="{{ site.socials.email }}" class="social-btn"><i data-lucide="mail" class="w-4 h-4"></i></a>
         </div>
       </div>
